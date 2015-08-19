@@ -8,9 +8,11 @@ ED-E Core unit software
 #include "ssd1327.h"
 #include <ssd1308.h>
 #include <sainsmartks.h>
-#include <lcm1602.h>
 #include <jhd1313m1.h>
 #include <eboled.h>
+#include "mraa.hpp"
+#include <iostream>
+#include <unistd.h>
 
 #define DEVICE_ADDRESS    0x3C
 #define BUS_NUMBER        0x0
@@ -93,9 +95,24 @@ static uint8_t logo[] ={
 int
 main(int argc, char **argv)
 {
-//! [Interesting]
+	//Item select position
+	int pos = 1;
+	//Setup GPIO
+	mraa::Gpio* down_pin = new mraa::Gpio(4);
+	mraa::Gpio* back_pin = new mraa::Gpio(5);
+	mraa::Gpio* select_pin = new mraa::Gpio(6);
+	mraa::Gpio* up_pin = new mraa::Gpio(7);
+
+	//Set pins to input
+	down_pin->dir(mraa::DIR_IN);
+	back_pin->dir(mraa::DIR_IN);
+	select_pin->dir(mraa::DIR_IN);
+	up_pin->dir(mraa::DIR_IN);
+
+	//Setup OLED
 	upm::SSD1327 *lcd = new upm::SSD1327(BUS_NUMBER, 0x3C);
 
+	//Draw ED-E logo and main menu text
 	lcd->setGrayLevel(12);
 	lcd->draw(logo, 96 * 96 / 8);
 	lcd->setCursor(9, 0);
@@ -104,6 +121,85 @@ main(int argc, char **argv)
 	lcd->write("  SETTINGS");
 	lcd->setCursor(11, 0);
 	lcd->write("  SHUTDOWN");
+
+	// main loop
+		for (;;) {
+			sleep(0.9);
+			int mode = 0;
+
+			/*Modes
+			 * 0 = NULL
+			 * 1 = DOWN
+			 * 2 = BACK
+			 * 3 = SELECT
+			 * 4 = UP
+			 */
+			//Check mode change
+			if (mode == 0)
+			{
+				//Check for down button press
+				if (down_pin->read() == 0)
+				{
+					std::cout << "Down" << std::endl;
+					mode = 1;
+					pos += 1;
+					if (pos == 4)
+					{
+						pos = 3;
+					}
+				}
+				//check for back button press
+				if (back_pin->read() == 0)
+				{
+					std::cout << "Back" << std::endl;
+					mode = 2;
+				}
+				//check for select button press
+				if (select_pin->read() == 0)
+				{
+					std::cout << "select" << std::endl;
+					mode = 3;
+				}
+				//check for up button press
+				if (up_pin->read() == 0)
+				{
+					std::cout << "up" << std::endl;
+					mode = 4;
+					pos -= 1;
+					if (pos == -1)
+					{
+						pos = 1;
+					}
+				}
+			}
+			//Wait for bounce
+			if (mode != 0)
+			{
+				//Blit cursor at current pos
+				if (pos == 1){
+					lcd->setCursor(10, 0);
+					lcd->write("  ");
+					lcd->setCursor(9, 0);
+					lcd->write(" <");
+				}
+				if (pos == 2){
+					lcd->setCursor(11, 0);
+					lcd->write("  ");
+					lcd->setCursor(9, 0);
+					lcd->write("  ");
+					lcd->setCursor(10, 0);
+					lcd->write(" <");
+				}
+				if (pos == 3){
+					lcd->setCursor(10, 0);
+					lcd->write("  ");
+					lcd->setCursor(11, 0);
+					lcd->write(" <");
+				}
+				//Wait a little then reset
+				mode = 0;
+			}
+		}
 
 	delete lcd;
 //! [Interesting]
