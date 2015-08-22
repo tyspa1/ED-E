@@ -24,15 +24,25 @@ ED-E Core unit software
 #include <mq2.h>
 #include <buzzer.h>
 #include <lcm1602.h>
+#include <signal.h>
+#include "yg1006.h"
 
+//Create all the sensor objects
 upm::TP401* airSensor = new upm::TP401(0); // Instantiate new grove air quality sensor on analog pin A0
+// Instantiate a yg1006 flame sensor on digital pin D2
+upm::YG1006* flame = new upm::YG1006(2);
 
 //Check built in sensors and save data
 void scan_sensors()
 {
 	std::cout << "Sampling built in sensors" << std::endl;
-	int value = airSensor->getSample(); // Read raw value
-	std::cout << "Air quality" << value << std::endl;
+	//Air Quality
+	int airQualityReading = airSensor->getSample(); // Read raw value
+	std::cout << "Air quality: " << airQualityReading << std::endl;
+
+	//Flame
+	bool flameReading = flame->flameDetected();
+	std::cout << "Fire detected: " << flameReading << std::endl;
 }
 
 int main(int argc, char **argv)
@@ -63,6 +73,7 @@ int main(int argc, char **argv)
 		}
 
 	delete lcd;
+	delete flame;
 //! [Interesting]
         return 0;
 }
