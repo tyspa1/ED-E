@@ -2,7 +2,8 @@
  * button.h
  *
  *  Created on: Aug 19, 2015
- *      Author: Kim
+ *      Author: Tyler Spadgenske
+ *      GPL License v2
  */
 
 #ifndef BUTTON_H_
