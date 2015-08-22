@@ -26,24 +26,16 @@ ED-E Core unit software
 #include <lcm1602.h>
 #include <signal.h>
 #include "yg1006.h"
+#include <stdlib.h>
+#include "groveloudness.h"
+#include "buzzer.h"
+#include "sensors.h"
 
-//Create all the sensor objects
-upm::TP401* airSensor = new upm::TP401(0); // Instantiate new grove air quality sensor on analog pin A0
-// Instantiate a yg1006 flame sensor on digital pin D2
-upm::YG1006* flame = new upm::YG1006(2);
+// create Buzzer instance
+upm::Buzzer* sound = new upm::Buzzer(3);
 
-//Check built in sensors and save data
-void scan_sensors()
-{
-	std::cout << "Sampling built in sensors" << std::endl;
-	//Air Quality
-	int airQualityReading = airSensor->getSample(); // Read raw value
-	std::cout << "Air quality: " << airQualityReading << std::endl;
+int chord_ind[] = { DO, RE, MI, FA, SOL, LA, SI, DO, SI };
 
-	//Flame
-	bool flameReading = flame->flameDetected();
-	std::cout << "Fire detected: " << flameReading << std::endl;
-}
 
 int main(int argc, char **argv)
 {
@@ -56,6 +48,7 @@ int main(int argc, char **argv)
 	int clockRate = SAMPLE_RATE;
 	//Item select position
 	int pos = 1;
+
 	drawMainMenu();
 
 	// main loop
@@ -74,6 +67,7 @@ int main(int argc, char **argv)
 
 	delete lcd;
 	delete flame;
+	delete sound;
 //! [Interesting]
         return 0;
 }
