@@ -31,12 +31,6 @@ ED-E Core unit software
 #include "buzzer.h"
 #include "sensors.h"
 
-// create Buzzer instance
-upm::Buzzer* sound = new upm::Buzzer(3);
-
-int chord_ind[] = { DO, RE, MI, FA, SOL, LA, SI, DO, SI };
-
-
 int main(int argc, char **argv)
 {
 	//Constants
@@ -50,6 +44,7 @@ int main(int argc, char **argv)
 	int pos = 1;
 
 	drawMainMenu();
+	buzz(0, 50000);
 
 	// main loop
 		for (;;) {
@@ -67,7 +62,6 @@ int main(int argc, char **argv)
 
 	delete lcd;
 	delete flame;
-	delete sound;
 //! [Interesting]
         return 0;
 }
