@@ -5,6 +5,7 @@ copyright (c) 2015 Tyler Spadgenske
  
 #include <ESP8266WiFi.h>
 
+#define DEVICE_ID "m1"
 #define HOST "192.168.0.102"
 #define PORT 21
 
@@ -39,19 +40,20 @@ void loop() {
      return;
   }
   else {
-    Serial.print("Connected");
-    client.write("\nHello");
+    Serial.print("Connected to base");
+    client.write(DEVICE_ID);
   }
   while(1){
-    bool stat = client.connected();
-    if (stat){
+    //bool stat = client.connected();
+    //if (stat){
       client.write("Do you hear me");
       delay(2000);
-    }
-    else
+    //}
+    /*else
     {
       Serial.print("\nLost Connection with ");
       Serial.print(HOST);
-    }
+      break;
+    }*/
   }
 }
