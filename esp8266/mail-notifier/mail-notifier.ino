@@ -5,7 +5,7 @@ copyright (c) 2015 Tyler Spadgenske
  
 #include <ESP8266WiFi.h>
 
-#define DEVICE_ID "m1"
+#define DEVICE_ID "m11"
 #define HOST "192.168.0.102"
 #define PORT 21
 
@@ -13,6 +13,10 @@ const char* ssid = "spadgenske";
 const char* password = "68mustang";
 
 void setup() {
+
+}
+
+void loop() {
   //Connect to network
   delay(2000);
   Serial.begin(115200);
@@ -30,9 +34,6 @@ void setup() {
       while(1) delay(500);
     }
   }
-}
-
-void loop() {
   // Attempt a connection with base unit
    WiFiClient client;
    if (!client.connect(HOST, PORT)) {
@@ -42,18 +43,8 @@ void loop() {
   else {
     Serial.print("Connected to base");
     client.write(DEVICE_ID);
+    Serial.print("Sent data");
   }
-  while(1){
-    //bool stat = client.connected();
-    //if (stat){
-      client.write("Do you hear me");
-      delay(2000);
-    //}
-    /*else
-    {
-      Serial.print("\nLost Connection with ");
-      Serial.print(HOST);
-      break;
-    }*/
-  }
+  Serial.print("Entering Sleep Mode");
+  ESP.deepSleep(6000000, WAKE_RF_DEFAULT); // Sleep for 6 seconds, then wait for sensor change
 }

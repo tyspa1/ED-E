@@ -22,18 +22,20 @@ class Server():
         # Add server socket to the list of readable connections
         self.CONNECTION_LIST.append(self.server_socket)
 
-        #Client list
-        self.clients = {'addr':[], 'id':[], 'type':[]}
+        self.device_data = ''
 
-    def add_client(self, data):
-        self.clients['type'].append(data[0])
-        self.clients['id'].apppend(data[1])
-        print self.clients
+    def save_data(self):
+        if self.device_data != '':
+            device_type = self.device_data[0]
+            device_id = self.device_data[1]
+            device_input = self.device_data[2]
+            print 'Saving to database...'
+            print device_type
+            print device_id
+            print device_input
         
-    
     def run(self):
-        print "Chat server started on self.PORT " + str(self.PORT)
-        new_cli = False
+        print "Chat server started on PORT " + str(self.PORT)
         while True:
             # Get the list sockets which are ready to be read through select
             read_sockets,write_sockets,error_sockets = select.select(self.CONNECTION_LIST,[],[])
@@ -45,8 +47,6 @@ class Server():
                     sockfd, addr = self.server_socket.accept()
                     self.CONNECTION_LIST.append(sockfd)
                     print "Client %s connected" % addr[0]
-                    self.clients['addr'].append(addr[0])
-                    new_cli = True
              
                 #Some incoming message from a client
                 else:
@@ -57,16 +57,18 @@ class Server():
                         data = sock.recv(self.RECV_BUFFER)
                         if data:
                             print str(sock.getpeername()[0]) + '>' + data  + ' recv'
-                            if new_cli:
-                                self.add_client(data)
-                                new_cli = False
-                 
+                            self.device_data = data
+                        else:
+                            self.device_data = ''
+                            
                     except:
                         print "Client (%s, %s) is offline" % addr
                         sock.close()
                         self.CONNECTION_LIST.remove(sock)
                         continue
-     
+                    
+                self.save_data()
+            
         self.server_socket.close()
     
     def logo(self):
