@@ -25,7 +25,7 @@ thresholdContext ctx;
 upm::GroveLoudness* loudness = new upm::GroveLoudness(2);
 
 //Check built in sensors and save data
-void scan_sensors()
+void scan_sensors(int sensorData[], int *rSensorData)
 {
 	std::cout << "Sampling built in sensors" << std::endl;
 	//Air Quality
@@ -40,29 +40,30 @@ void scan_sensors()
 	ctx.averageReading = 0;
 	ctx.runningAverage = 0;
 	ctx.averagedOver   = 2;
+
+	int gas = 0;
 	int len = sensor->getSampledWindow (2, 128, buffer);
 	if (len) {
 		int thresh = sensor->findThreshold (&ctx, 30, buffer, len);
 	    std::cout << "MQ2 Gas: " << thresh << std::endl;
+	    gas = thresh;
 	}
 
 	//Sound
 	int val = loudness->value();
 	std::cout << "Loudness value (higher is louder): " << val << std::endl;
+
+	//Temp
+	//TODO: Add temp sensor DHT
+	int temp = 0;
+	temp = 0;
+
+	//Store info in easy manner for later use
+	rSensorData[0] = airQualityReading;
+	rSensorData[1] = flameReading;
+	rSensorData[2] = gas;
+	rSensorData[3] = val;
+	rSensorData[4] = temp;
 }
-
-//Sound the buzzer
-int chord_ind[] = { DO, RE, MI, FA, SOL, LA, SI, DO, SI };
-
-void buzz(int chord, int play_time)
-{
-	// create Buzzer instance
-	upm::Buzzer* sound = new upm::Buzzer(3);
-	std::cout << sound->playSound(chord_ind[chord], 1000000) << std::endl;
-	usleep(play_time);
-	delete sound;
-}
-
-
 
 #endif /* SENSORS_H_ */

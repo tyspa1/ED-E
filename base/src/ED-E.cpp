@@ -28,7 +28,6 @@ ED-E Core unit software
 #include "yg1006.h"
 #include <stdlib.h>
 #include "groveloudness.h"
-#include "buzzer.h"
 #include "sensors.h"
 
 int main(int argc, char **argv)
@@ -42,20 +41,23 @@ int main(int argc, char **argv)
 	int clockRate = SAMPLE_RATE;
 	//Item select position
 	int pos = 1;
+	//Data array
+	int sensorData[6];
+	int rSensorData[6];
 
 	drawMainMenu();
-	buzz(0, 50000);
+	buzz(0, 5000);
 
 	// main loop
 		for (;;) {
 			//Check mode change
-			pos = poll(pos); //poll d pad and blit cursor
+			pos = poll(pos, rSensorData); //poll d pad and blit cursor
 
 			//Check clock to see if ready to scan sensors
 			duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
 			if (duration > clockRate)
 			  {
-			    scan_sensors();
+			    scan_sensors(sensorData, rSensorData);
 			    clockRate += SAMPLE_RATE;
 			  }
 		}
