@@ -61,7 +61,6 @@ int poll(int pos, int sensorData[])
 			{
 				update = true;
 				std::cout << "select" << std::endl;
-				buzz(0, 5000);
 				pos += 3;
 			}
 			//check for up button press
@@ -88,7 +87,6 @@ int poll(int pos, int sensorData[])
 				update = true;
 				std::cout << "Back" << std::endl;
 				pos = 1;
-				buzz(0, 5000);
 				drawMainMenu();
 			}
 			//check for select button press
@@ -97,11 +95,44 @@ int poll(int pos, int sensorData[])
 				update = true;
 				std::cout << "select" << std::endl;
 				pos = 1;
-				buzz(0, 5000);
 				drawMainMenu();
 			}
 		}
 	}
+
+	if (update != true)
+		{
+			//Settings menu
+			if (pos == 5)
+			{
+				//check for back button press
+				if (back_pin->read() == 0)
+				{
+					update = true;
+					std::cout << "Back" << std::endl;
+					pos = 1;
+					lcd->setCursor(9, 0);
+					lcd->write(" <VIEW DATA ");
+					lcd->setCursor(10, 0);
+					lcd->write("  SETTINGS  ");
+					lcd->setCursor(11, 0);
+					lcd->write("  SHUTDOWN  ");
+				}
+				//check for select button press
+				if (select_pin->read() == 0)
+				{
+					update = true;
+					std::cout << "select" << std::endl;
+					lcd->setCursor(9, 0);
+					lcd->write(" <VIEW DATA ");
+					lcd->setCursor(10, 0);
+					lcd->write("  SETTINGS  ");
+					lcd->setCursor(11, 0);
+					lcd->write("  SHUTDOWN  ");
+					pos = 1;
+				}
+			}
+		}
 
 	//Wait for bounce
 	if (update != false)
@@ -191,6 +222,15 @@ int poll(int pos, int sensorData[])
 			lcd->write(temp);
 
 			}
+
+		if (pos == 5){
+			lcd->setCursor(9, 0);
+			lcd->write("    IP:     ");
+			lcd->setCursor(10, 0);
+			lcd->write("192.168.0.10");
+			lcd->setCursor(11, 0);
+			lcd->write("4           ");
+		}
 
 		//Wait a little then reset
 		update = false;
