@@ -13,6 +13,10 @@
 #include <sstream>
 #include "oled.h"
 #include "buzz.h"
+#include <sys/types.h>
+#include <ifaddrs.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 //Setup GPIO
 mraa::Gpio* down_pin = new mraa::Gpio(4);
@@ -227,9 +231,37 @@ int poll(int pos, int sensorData[])
 			lcd->setCursor(9, 0);
 			lcd->write("    IP:     ");
 			lcd->setCursor(10, 0);
-			lcd->write("192.168.0.10");
+
+			//Get IP address
+			struct ifaddrs * ifAddrStruct=NULL;
+			struct ifaddrs * ifa=NULL;
+			void * tmpAddrPtr=NULL;
+
+			getifaddrs(&ifAddrStruct);
+
+			char *addr;
+			for (ifa = ifAddrStruct; ifa != NULL; ifa = ifa->ifa_next) {
+				if (ifa ->ifa_addr->sa_family==AF_INET) { // check it is IP4
+					// is a valid IP4 Address
+				    tmpAddrPtr=&((struct sockaddr_in *)ifa->ifa_addr)->sin_addr;
+				    char addressBuffer[INET_ADDRSTRLEN];
+				    inet_ntop(AF_INET, tmpAddrPtr, addressBuffer, INET_ADDRSTRLEN);
+
+				    if (strcmp(ifa->ifa_name, "wlan0") == 0) {
+				    	addr = addressBuffer;
+				    	std::cout << addr << std::endl;
+				    	break;
+				       }
+
+
+				   	   }
+				    }
+			if (ifAddrStruct!=NULL)
+				 freeifaddrs(ifAddrStruct);//remember to free ifAddrStruct
+
+			lcd->write(addr);
 			lcd->setCursor(11, 0);
-			lcd->write("4           ");
+			lcd->write("            ");
 		}
 
 		//Wait a little then reset
