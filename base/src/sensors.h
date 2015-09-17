@@ -9,6 +9,7 @@
 #define SENSORS_H_
 
 #include "db.h"
+#include "iot.h"
 
 //Create all the sensor objects
 
@@ -69,6 +70,7 @@ void scan_sensors(int sensorData[], int *rSensorData)
 
 	//Store values in database
 	storesensors(airQualityReading, gas, val, temp, flameReading);
+	saveToCloud(airQualityReading, gas, val, temp, flameReading);
 
 }
 
