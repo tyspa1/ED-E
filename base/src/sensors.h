@@ -8,6 +8,8 @@
 #ifndef SENSORS_H_
 #define SENSORS_H_
 
+#include "db.h"
+
 //Create all the sensor objects
 
 // Instantiate new grove air quality sensor on analog pin A0
@@ -64,6 +66,10 @@ void scan_sensors(int sensorData[], int *rSensorData)
 	rSensorData[2] = gas;
 	rSensorData[3] = val;
 	rSensorData[4] = temp;
+
+	//Store values in database
+	storesensors(airQualityReading, gas, val, temp, flameReading);
+
 }
 
 #endif /* SENSORS_H_ */

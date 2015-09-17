@@ -29,10 +29,12 @@ ED-E Core unit software
 #include <stdlib.h>
 #include "groveloudness.h"
 #include "sensors.h"
+#include "db.h"
 
 
 int main(int argc, char **argv)
 {
+	setupdb();
 	//Constants
 	int SAMPLE_RATE = 20;
 	//create clock
