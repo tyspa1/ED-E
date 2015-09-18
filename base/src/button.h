@@ -17,6 +17,7 @@
 #include <ifaddrs.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <cstdio>
 
 //Setup GPIO
 mraa::Gpio* down_pin = new mraa::Gpio(4);
@@ -229,6 +230,8 @@ int poll(int pos, int sensorData[])
 		if (pos == 6)
 		{
 			std::cout << "Shutdown" << std::endl;
+			system("shutdown");
+			exit(0);
 		}
 
 
