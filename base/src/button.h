@@ -48,34 +48,27 @@ int poll(int pos, int sensorData[])
 			if (down_pin->read() == 0)
 			{
 				update = true;
-				pos += 1;
-				if (pos == 4)
-				{
-					pos = 3;
-				}
+				pos = 5;
 			}
 			//check for back button press
 			if (back_pin->read() == 0)
 			{
 				update = true;
 				std::cout << "Back" << std::endl;
+				pos = 4;
 			}
 			//check for select button press
 			if (select_pin->read() == 0)
 			{
 				update = true;
 				std::cout << "select" << std::endl;
-				pos += 3;
+				pos = 4;
 			}
 			//check for up button press
 			if (up_pin->read() == 0)
 			{
 				update = true;
-			pos -= 1;
-			if (pos == -1)
-			{
-				pos = 1;
-			}
+			pos = 6;
 			}
 		}
 	}
@@ -115,25 +108,15 @@ int poll(int pos, int sensorData[])
 					update = true;
 					std::cout << "Back" << std::endl;
 					pos = 1;
-					lcd->setCursor(9, 0);
-					lcd->write(" <VIEW DATA ");
-					lcd->setCursor(10, 0);
-					lcd->write("  SETTINGS  ");
-					lcd->setCursor(11, 0);
-					lcd->write("  SHUTDOWN  ");
+					sleep(1);
 				}
 				//check for select button press
 				if (select_pin->read() == 0)
 				{
 					update = true;
 					std::cout << "select" << std::endl;
-					lcd->setCursor(9, 0);
-					lcd->write(" <VIEW DATA ");
-					lcd->setCursor(10, 0);
-					lcd->write("  SETTINGS  ");
-					lcd->setCursor(11, 0);
-					lcd->write("  SHUTDOWN  ");
 					pos = 1;
+					sleep(1);
 				}
 			}
 		}
@@ -141,27 +124,6 @@ int poll(int pos, int sensorData[])
 	//Wait for bounce
 	if (update != false)
 	{
-		//Blit cursor at current position
-		if (pos == 1){
-			lcd->setCursor(10, 0);
-			lcd->write("  ");
-			lcd->setCursor(9, 0);
-			lcd->write(" <");
-		}
-		if (pos == 2){
-			lcd->setCursor(11, 0);
-			lcd->write("  ");
-			lcd->setCursor(9, 0);
-			lcd->write("  ");
-			lcd->setCursor(10, 0);
-			lcd->write(" <");
-		}
-		if (pos == 3){
-			lcd->setCursor(10, 0);
-			lcd->write("  ");
-			lcd->setCursor(11, 0);
-			lcd->write(" <");
-		}
 		if (pos == 4){
 			//Clear screen
 			lcd->setCursor(0, 0);
@@ -263,6 +225,12 @@ int poll(int pos, int sensorData[])
 			lcd->setCursor(11, 0);
 			lcd->write("            ");
 		}
+
+		if (pos == 6)
+		{
+			std::cout << "Shutdown" << std::endl;
+		}
+
 
 		//Wait a little then reset
 		update = false;
