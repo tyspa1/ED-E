@@ -69,18 +69,7 @@ class Server():
                         sock.close()
                         self.CONNECTION_LIST.remove(sock)
                         continue
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-                self.save_data()
-
-=======
-=======
-                    
-                self.save_data()
->>>>>>> origin/master
-            
->>>>>>> origin/master
+                        
         self.server_socket.close()
 
 if __name__ == "__main__":
