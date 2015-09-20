@@ -5,8 +5,8 @@ copyright (c) 2015 Tyler Spadgenske
  
 #include <ESP8266WiFi.h>
 
-#define DEVICE_ID "d11"
-#define HOST "192.168.0.107"
+#define DEVICE_ID "m11"
+#define HOST "192.168.0.102"
 #define PORT 21
 
 const char* ssid = "spadgenske";
