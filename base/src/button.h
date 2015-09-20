@@ -230,6 +230,7 @@ int poll(int pos, int sensorData[])
 		if (pos == 6)
 		{
 			std::cout << "Shutdown" << std::endl;
+			buzz(0, 5000);
 			system("shutdown");
 			exit(0);
 		}
