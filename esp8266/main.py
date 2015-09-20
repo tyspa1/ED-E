@@ -58,6 +58,7 @@ class Server():
                         if data:
                             print str(sock.getpeername()[0]) + '>' + data  + ' recv'
                             self.device_data = data
+                            self.save_data()
                         else:
                             self.device_data = ''
                             
@@ -66,8 +67,6 @@ class Server():
                         sock.close()
                         self.CONNECTION_LIST.remove(sock)
                         continue
-                    
-                self.save_data()
             
         self.server_socket.close()
     

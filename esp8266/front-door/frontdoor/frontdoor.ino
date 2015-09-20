@@ -1,5 +1,5 @@
 /*
-ESP8266 Mail Notifier
+ESP8266 Front Door Notifier
 copyright (c) 2015 Tyler Spadgenske
 */
  
