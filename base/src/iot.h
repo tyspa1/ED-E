@@ -40,7 +40,7 @@ void saveToCloud(int air, int gas, int sound, int temp, int flame)
 
   //Send flame sensor data
   std::ostringstream h;
-  h << "iotkit-admin observation Flame " << flame;
+  h << "iotkit-admin observation Fire " << flame;
   text = h.str();
   c = text.c_str();
   system(c);

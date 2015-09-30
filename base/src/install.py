@@ -15,7 +15,7 @@ class Install():
         os.system("iotkit-admin register MQ2_Gas gas.v1.0")
         os.system("iotkit-admin register Sound sound.v1.0")
         os.system("iotkit-admin register Temp temperature.v1.0")
-        os.system("iotkit-admin register Flame flame.v1.0")
+        os.system("iotkit-admin register Fire fire.v1.0")
         os.system("iotkit-admin register FrontDoor frontdoor.v1.0")
         print "Compiling Code..."
         os.system("i586-poky-linux-g++ -I/usr/include/upm -I/usr/include/mraa -O0 -g3 -Wall -c -fmessage-length=0 -m32 -march=i586 -c -ffunction-sections -fdata-sections -I/usr/include/mysql -L/usr/lib -lmysqlclient -lpthread -lz -lm -ldl -o ED-E.o ED-E.cpp")
