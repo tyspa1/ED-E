@@ -10,6 +10,7 @@
 
 #include "db.h"
 #include "iot.h"
+#include "buzz.h"
 
 //Create all the sensor objects
 
@@ -71,6 +72,12 @@ void scan_sensors(int sensorData[], int *rSensorData)
 	//Store values in database
 	storesensors(airQualityReading, gas, val, temp, flameReading);
 	saveToCloud(airQualityReading, gas, val, temp, flameReading);
+
+	//Sound alarm if Fire
+	if (flameReading == 1)
+	{
+		buzz(0, 600000);
+	}
 
 }
 
