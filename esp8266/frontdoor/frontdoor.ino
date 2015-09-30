@@ -1,12 +1,15 @@
 /*
-ESP8266 Front Door Notifier
+ESP8266 Sensor Unit
 copyright (c) 2015 Tyler Spadgenske
+
+Change the DEVICE_ID to the name of your device assigned on ED-E
+Change the HOST to the IP address of ED-E (run ifconfig or check the settings menu on the OLED)
 */
  
 #include <ESP8266WiFi.h>
 
-#define DEVICE_ID "d11"
-#define HOST "192.168.0.107"
+#define DEVICE_ID "FrontDoor"
+#define HOST "192.168.0.103"
 #define PORT 21
 
 const char* ssid = "spadgenske";

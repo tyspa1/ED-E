@@ -27,15 +27,8 @@ class Server():
 
     def save_data(self):
         if self.device_data != '':
-            device_type = self.device_data[0]
-            device_id = self.device_data[1]
-            device_input = self.device_data[2]
-            print 'Saving to database...'
-            print device_type
-            print device_id
-            print device_input
-            if device_type == 'd':
-                os.system("iotkit-admin observation FrontDoor 1")
+            print self.device_data
+            os.system("iotkit-admin observation " + self.device_data + " 1")
 
     def run(self):
         print "Chat server started on PORT " + str(self.PORT)
@@ -69,7 +62,8 @@ class Server():
                         sock.close()
                         self.CONNECTION_LIST.remove(sock)
                         continue
-                        
+            self.save_data()
+
         self.server_socket.close()
 
 if __name__ == "__main__":
