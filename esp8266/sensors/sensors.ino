@@ -9,7 +9,7 @@ Change the HOST to the IP address of ED-E (run ifconfig or check the settings me
 #include <ESP8266WiFi.h>
 
 #define DEVICE_ID "FrontDoor"
-#define HOST "192.168.0.103"
+#define HOST "192.168.0.105"
 #define PORT 21
 
 const char* ssid = "spadgenske";

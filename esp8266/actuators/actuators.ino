@@ -1,19 +1,22 @@
 /*
-ESP8266 Mail Notifier
+ESP8266 Actuator Unit
 copyright (c) 2015 Tyler Spadgenske
+
+Change the DEVICE_ID to the name of your device assigned on ED-E
+Change the HOST to the IP address of ED-E (run ifconfig or check the settings menu on the OLED)
 */
  
 #include <ESP8266WiFi.h>
 
-#define DEVICE_ID "m11"
-#define HOST "192.168.0.102"
-#define PORT 21
+#define DEVICE_ID "Lamp"
+#define HOST "192.168.0.104"
+#define PORT 22
 
 const char* ssid = "spadgenske";
 const char* password = "68mustang";
 
 void setup() {
-
+  pinMode(13, OUTPUT);  
 }
 
 void loop() {
@@ -34,6 +37,10 @@ void loop() {
       while(1) delay(500);
     }
   }
+  
+  //Main loop
+  while (1)  
+  {
   // Attempt a connection with base unit
    WiFiClient client;
    if (!client.connect(HOST, PORT)) {
@@ -46,5 +53,6 @@ void loop() {
     Serial.print("Sent data");
   }
   Serial.print("Entering Sleep Mode");
-  ESP.deepSleep(6000000, WAKE_RF_DEFAULT); // Sleep for 6 seconds, then wait for sensor change
+  }
+  //ESP.deepSleep(6000000, WAKE_RF_DEFAULT); // Sleep for 6 seconds, then wait for sensor change
 }
