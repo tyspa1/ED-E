@@ -8,51 +8,80 @@ Change the HOST to the IP address of ED-E (run ifconfig or check the settings me
  
 #include <ESP8266WiFi.h>
 
-#define DEVICE_ID "Lamp"
-#define HOST "192.168.0.104"
-#define PORT 22
+char ssid[] = "spadgenske"; //  your network SSID (name) 
+char pass[] = "68mustang";    // your network password (use for WPA, or use as key for WEP)
+#define HOST "192.168.0.105"
+#define PORT 888
 
-const char* ssid = "spadgenske";
-const char* password = "68mustang";
+int keyIndex = 0;            // your network key Index number (needed only for WEP)
+
+int status = WL_IDLE_STATUS;
+
+boolean alreadyConnected = false; // whether or not the client was connected previously
 
 void setup() {
-  pinMode(13, OUTPUT);  
-}
+  //Initialize serial and wait for port to open:
+  Serial.begin(9600);
+  
+  // attempt to connect to Wifi network:
+  while ( status != WL_CONNECTED) { 
+    Serial.print("Attempting to connect to SSID: ");
+    Serial.println(ssid);
+    // Connect to WPA/WPA2 network. Change this line if using open or WEP network:    
+    status = WiFi.begin(ssid, pass);
+
+    // wait 10 seconds for connection:
+    delay(10000);
+  } 
+  // you're connected now, so print out the status:
+  printWifiStatus();
+ }
+
 
 void loop() {
-  //Connect to network
-  delay(2000);
-  Serial.begin(115200);
-  WiFi.begin(ssid, password);
-  Serial.print("\nConnecting to "); 
-  Serial.println(ssid);
-  uint8_t i = 0;
-  while (WiFi.status() != WL_CONNECTED && i++ < 20) {
-    Serial.print(".");
-    delay(500);
-    //Return error if cannot connect
-    if(i == 21){
-      Serial.print("Could not connect to"); 
-      Serial.println(ssid);
-      while(1) delay(500);
-    }
-  }
-  
-  //Main loop
-  while (1)  
-  {
+  // wait for a new client:
   // Attempt a connection with base unit
    WiFiClient client;
    if (!client.connect(HOST, PORT)) {
      Serial.println("connection failed");
      return;
   }
-  else {
-    Serial.print("Connected to base");
-    client.write(DEVICE_ID);
-    Serial.print("Sent data");
+
+
+  // when the client sends the first byte, say hello:
+  if (client) {
+    if (!alreadyConnected) {
+      // clead out the input buffer:
+      client.flush();    
+      Serial.println("We have a new client");
+      client.println("Hello, client!"); 
+      alreadyConnected = true;
+    } 
+
+    if (client.available() > 0) {
+      // read the bytes incoming from the client:
+      char thisChar = client.read();
+      // echo the bytes back to the client:
+      // echo the bytes to the server as well:
+      Serial.write(thisChar);
+    }
   }
-  Serial.print("Entering Sleep Mode");
-  }
-  //ESP.deepSleep(6000000, WAKE_RF_DEFAULT); // Sleep for 6 seconds, then wait for sensor change
+}
+
+
+void printWifiStatus() {
+  // print the SSID of the network you're attached to:
+  Serial.print("SSID: ");
+  Serial.println(WiFi.SSID());
+
+  // print your WiFi shield's IP address:
+  IPAddress ip = WiFi.localIP();
+  Serial.print("IP Address: ");
+  Serial.println(ip);
+
+  // print the received signal strength:
+  long rssi = WiFi.RSSI();
+  Serial.print("signal strength (RSSI):");
+  Serial.print(rssi);
+  Serial.println(" dBm");
 }

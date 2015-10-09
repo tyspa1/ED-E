@@ -6,6 +6,7 @@ import socket
 import mraa
 import json
 import sys
+import time
 
 def transmit(name, value):
     HOST = ''   # Symbolic name meaning all available interfaces
@@ -23,9 +24,9 @@ def transmit(name, value):
         print 'Socket bind complete'
 
     s.listen(10)
-    print 'Socket now listening'
 
     #now keep talking with the client
+    print 'connecting to actuator...'
     while 1:
         #wait to accept a connection - blocking call
         conn, addr = s.accept()
@@ -36,12 +37,11 @@ def transmit(name, value):
         if not data:
             break
 
-        conn.sendall(name)
-        conn.sendall(value)
+        conn.sendall("hello")
 
     conn.close()
     s.close()
-    print 'closed.'
+    print 'connection closed.'
 
 UDP_IP = "127.0.0.1"
 UDP_PORT = 41235

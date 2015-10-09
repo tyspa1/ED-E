@@ -21,7 +21,9 @@ class EDE():
         time.sleep(1)
         Popen(["/home/root/ED-E/base/src/./ED-E"])
         print "Starting Sensor Server..."
-        Popen(['python', '/home/root/ED-E/esp8266/main.py'])
+        Popen(['python', '/home/root/ED-E/esp8266/sensors.py'])
+        print "Starting Actuator Server..."
+        Popen(['python', '/home/root/ED-E/esp8266/actuators.py'])
 
 if __name__ == "__main__":
     s = EDE()
