@@ -4,7 +4,7 @@ copyright :copyright: 2015 Tyler Spadgenske </br>
 All code under GPL Verison 2 License
 
 ### Learn More
-Hackaday Link Coming Soon!
+https://hackaday.io/project/8011
 
 ### Build Your Own
-Instuctables Link Coming Soon!
+http://www.instructables.com/id/Build-your-own-Home-Automation-and-Monitoring-Syst/
